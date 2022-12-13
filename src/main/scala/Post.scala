@@ -10,10 +10,7 @@ object Post:
     case LIVE
   }
 
-  opaque type PostTitle = String
+  opaque type PostTitle <: String = String
 
   object PostTitle:
     def apply(s: String): PostTitle = s
-
-  extension (x: PostTitle)
-    def toString: String = x

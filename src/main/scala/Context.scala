@@ -6,7 +6,7 @@ import Post.{PostTitle, PostState}
 import javax.sql.DataSource
 
 case class Context(override val ds: DataSource) extends Quill.Sqlite(Literal, ds) {
-  given MappedEncoding[PostTitle, String](_.toString)
+  given MappedEncoding[PostTitle, String](identity)
   given MappedEncoding[String, PostTitle](PostTitle(_))
 
   given MappedEncoding[PostState, String](_.toString)
