@@ -1,14 +1,16 @@
 import io.getquill.*
 import io.getquill.jdbczio.Quill
 import zio.ZLayer
+import Post.{PostTitle, PostState}
 
-import java.sql.Types
 import javax.sql.DataSource
 
 case class Context(override val ds: DataSource) extends Quill.Sqlite(Literal, ds) {
+  given MappedEncoding[PostTitle, String](_.toString)
+  given MappedEncoding[String, PostTitle](PostTitle(_))
 
-  given Encoder[PostState] = encoder(Types.VARCHAR, (index, value, row) => row.setString(index, value.toString))
-  given Decoder[PostState] = decoder((index, row, _) => PostState.valueOf(row.getString(index)))
+  given MappedEncoding[PostState, String](_.toString)
+  given MappedEncoding[String, PostState](s => PostState.valueOf(s))
 
   inline given SchemaMeta[Post] = schemaMeta("post")
   inline def posts        = query[Post]

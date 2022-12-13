@@ -1,9 +1,10 @@
 import io.getquill.*
 import zio.{Task, URLayer, ZIO, ZLayer}
+import Post.{PostTitle, PostState}
 
 trait PostRepository:
   def list: Task[List[Post]]
-  def byString(title: Option[String]): Task[List[Post]]
+  def byString(title: Option[PostTitle]): Task[List[Post]]
   def byEnum(state: Option[PostState]): Task[List[Post]]
 
 object PostRepository {
@@ -16,7 +17,7 @@ object PostRepository {
       run(posts)
     }
 
-    override def byString(title: Option[String]): Task[List[Post]] = {
+    override def byString(title: Option[PostTitle]): Task[List[Post]] = {
       run(posts.filter(p => lift(title).forall(s => s == p.title)))
     }
 
